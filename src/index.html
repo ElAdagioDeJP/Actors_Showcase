@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="output.css" rel="stylesheet">
     <link rel="shortcut icon" href="/image/calamardo2.png" type="image/x-icon">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(verGrafica);
+    </script>
     <title>Actors Table</title>
 </head>
 <body>
@@ -25,6 +30,8 @@
     </div>
     <div>
         <span id="actor-count">0</span> actores en la tabla
+        <canvas id="miGrafica" width="400" height="200"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </div>
     <script src="app.js"></script>
 </body>
