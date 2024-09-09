@@ -16,19 +16,36 @@
 </head>
 <body>
     <div id="app">
-        <h2>Actors</h2>
-        <input type="text" id="search" placeholder="Search by name">
-        <table id="actors-table">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Awards</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+        <header class="relative bg-white">
+            <img src="/image/hollywood.webp" alt="Hollywood" class="w-full h-auto object-cover">
+            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <h1 class="text-5xl font-bold text-white">
+                Actores
+              </h1>
+            </div>
+          </header>
+            
+          <div class="p-6 max-w-4xl mx-auto">
+            <div class="mb-4">
+                <input type="text" id="search-actor" placeholder="Buscar por nombre" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div class="overflow-x-auto">
+                <table id="actors-table" class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    <thead>
+                        <tr class="bg-gray-100 border-b">
+                            <th class="py-3 px-4 text-left text-gray-600">ID</th>
+                            <th class="py-3 px-4 text-left text-gray-600">Nombre</th>
+                            <th class="py-3 px-4 text-left text-gray-600">Premios</th>
+                            <th class="py-3 px-4 text-left text-gray-600">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be inserted here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
         <div id="modalBackground"></div>
         <div id="actorDetails">
           <button id="closeButton" onclick="cerrarDiv()">X</button>
