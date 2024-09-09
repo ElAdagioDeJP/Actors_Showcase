@@ -339,7 +339,6 @@ function verGrafico() {
         },
       },
     });
-    console.log(premios_totales);
   }
   function clearLocalStorage() {
     confirm('¿Estás seguro de que deseas borrar todo el Local Storage? Esta acción no se puede deshacer.') 
@@ -347,3 +346,8 @@ function verGrafico() {
   }
   
   verGrafico();
+/* 
+Falta mejorar la grafica para que muestre los premios en tiempo real
+Poder eliminar todos los actores de una vez para iniciar desde 0
+Meter las funciones que cree en una clase
+*/
