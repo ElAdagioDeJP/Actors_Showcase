@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="output.css" rel="stylesheet">
     <link rel="shortcut icon" href="/image/calamardo2.png" type="image/x-icon">
+    <link rel="stylesheet" href="input.css">
+    <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
         google.charts.load('current', { packages: ['corechart'] });
@@ -27,12 +29,20 @@
             </thead>
             <tbody></tbody>
         </table>
+        <div id="modalBackground"></div>
+        <div id="actorDetails">
+          <button id="closeButton" onclick="cerrarDiv()">X</button>
+        </div>
+        
+          
     </div>
     <div>
         <span id="actor-count">0</span> actores en la tabla
         <canvas id="miGrafica" width="400" height="200"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     </div>
+    <button id="clearStorageButton" onclick="clearLocalStorage()">Borrar Local Storage</button>
     <script src="test.js"></script>
 </body>
 </html>
