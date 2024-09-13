@@ -1,65 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="output.css" rel="stylesheet">
-    <link rel="shortcut icon" href="/image/calamardo2.png" type="image/x-icon">
-    <link rel="stylesheet" href="input.css">
-    <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="output.css" rel="stylesheet" />
+    <link
+      rel="shortcut icon"
+      href="/image/calamardo2.png"
+      type="image/x-icon"
+    />
+    <link rel="stylesheet" href="input.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      type="text/javascript"
+      src="https://www.gstatic.com/charts/loader.js"
+    ></script>
     <script type="text/javascript">
-        google.charts.load('current', { packages: ['corechart'] });
-        google.charts.setOnLoadCallback(verGrafica);
+      google.charts.load("current", { packages: ["corechart"] });
+      google.charts.setOnLoadCallback(verGrafica);
     </script>
     <title>Actors Table</title>
-</head>
-<body>
+    <style>
+      /* Estilo moderno del contenedor principal */
+      #actorDetails {
+        background-color: #f9f9f9; /* Fondo claro y neutro */
+        border-radius: 16px; /* Bordes redondeados */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra sutil y suave */
+        padding: 30px;
+        width: 80%; /* Ancho flexible */
+        max-width: 600px; /* Ancho máximo */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        font-family: "Arial", sans-serif;
+        color: #333;
+        text-align: center; /* Centramos el texto */
+        display: none;
+        overflow-y: auto; /* Permitir scroll si el contenido es largo */
+        max-height: 90vh; /* No sobrepase la altura de la pantalla */
+        transition: transform 0.3s ease, opacity 0.3s ease; /* Transición suave al aparecer */
+        opacity: 0; /* Inicialmente oculto */
+      }
+
+      #actorDetails.active {
+        display: block;
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.05); /* Efecto de agrandado al aparecer */
+      }
+
+      /* Fondo oscuro detrás del modal */
+      #modalBackground {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        transition: opacity 0.3s ease;
+      }
+
+      #modalBackground.active {
+        display: block;
+        opacity: 1;
+      }
+
+      /* Botón de cierre moderno */
+      #closeButton {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: transparent;
+        color: #333;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        transition: color 0.3s;
+      }
+
+      #closeButton:hover {
+        color: #e74c3c; /* Color de hover */
+      }
+
+      /* Estilos para los textos */
+      #actorDetails h3 {
+        font-size: 24px;
+        margin-bottom: 12px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      #actorDetails h4 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #666;
+        font-weight: 500;
+      }
+
+      #actorDetails p {
+        font-size: 16px;
+        margin-bottom: 20px;
+        line-height: 1.8;
+        color: #555;
+      }
+
+      /* Estilo moderno para la imagen */
+      #actorDetails img {
+        border-radius: 12px;
+        margin: 20px auto;
+        width: 60%; /* Imagen más pequeña */
+        height: auto;
+        display: block; /* Centrar la imagen */
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+      }
+
+      /* Ajustes responsivos */
+      @media (max-width: 768px) {
+        #actorDetails {
+          padding: 20px;
+          width: 90%;
+        }
+
+        #actorDetails h3 {
+          font-size: 22px;
+        }
+
+        #actorDetails h4 {
+          font-size: 16px;
+        }
+
+        #actorDetails p {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        #actorDetails {
+          padding: 15px;
+          width: 95%;
+        }
+
+        #actorDetails h3 {
+          font-size: 20px;
+        }
+
+        #actorDetails h4 {
+          font-size: 14px;
+        }
+
+        #actorDetails p {
+          font-size: 12px;
+        }
+      }
+
+      #clearStorageButton {
+        background: linear-gradient(
+          90deg,
+          #ff6b6b,
+          #f56bff
+        ); /* Degradado de colores */
+        border: none;
+        border-radius: 8px;
+        color: white;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        outline: none;
+        display: inline-block;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      #clearStorageButton:hover {
+        background: linear-gradient(
+          90deg,
+          #ff4b4b,
+          #d74bff
+        ); /* Cambia el degradado al pasar el mouse */
+        transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
+      }
+
+      #clearStorageButton:active {
+        background: linear-gradient(
+          90deg,
+          #ff3b3b,
+          #b63bff
+        ); /* Color más oscuro al hacer clic */
+        transform: scale(0.95); /* Leve reducción al presionar */
+      }
+
+      #clearStorageButton:focus {
+        outline: none; /* Eliminar borde de enfoque */
+      }
+    </style>
+  </head>
+  <body>
     <div id="app">
-        <header class="relative bg-white">
-            <img src="/image/hollywood.webp" alt="Hollywood" class="w-full h-auto object-cover">
-            <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <h1 class="text-5xl font-bold text-white">
-                Actores
-              </h1>
-            </div>
-          </header>
-            
-          <div class="p-6 max-w-4xl mx-auto">
-            <div class="mb-4">
-                <input type="text" id="search-actor" placeholder="Buscar por nombre" class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
-            <div class="overflow-x-auto">
-                <table id="actors-table" class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
-                    <thead>
-                        <tr class="bg-gray-100 border-b">
-                            <th class="py-3 px-4 text-left text-gray-600">ID</th>
-                            <th class="py-3 px-4 text-left text-gray-600">Nombre</th>
-                            <th class="py-3 px-4 text-left text-gray-600">Premios</th>
-                            <th class="py-3 px-4 text-left text-gray-600">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Rows will be inserted here -->
-                    </tbody>
-                </table>
-            </div>
+      <header class="relative bg-white">
+        <img
+          src="/image/hollywood.webp"
+          alt="Hollywood"
+          class="w-full h-auto object-cover"
+        />
+        <div
+          class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50"
+        >
+          <h1 class="text-5xl font-bold text-white">Actores</h1>
         </div>
-        
-        <div id="modalBackground"></div>
-        <div id="actorDetails">
-          <button id="closeButton" onclick="cerrarDiv()">X</button>
+      </header>
+
+      <div class="p-6 max-w-4xl mx-auto">
+        <div class="mb-4">
+          <input
+            type="text"
+            id="search-actor"
+            placeholder="Buscar por nombre"
+            class="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
         </div>
-        
-          
+        <div class="overflow-x-auto">
+          <table
+            id="actors-table"
+            class="min-w-full bg-white border border-gray-200 rounded-lg shadow-md"
+          >
+            <thead>
+              <tr class="bg-gray-100 border-b">
+                <th class="py-3 px-4 text-left text-gray-600">ID</th>
+                <th class="py-3 px-4 text-left text-gray-600">Nombre</th>
+                <th class="py-3 px-4 text-left text-gray-600">Premios</th>
+                <th class="py-3 px-4 text-left text-gray-600">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Rows will be inserted here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="modalBackground"></div>
+      <div id="actorDetails">
+        <button id="closeButton" onclick="cerrarDiv()">X</button>
+      </div>
     </div>
     <div>
-        <span id="actor-count">0</span> actores en la tabla
-        <canvas id="miGrafica" width="400" height="200"></canvas>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+      <span id="actor-count">0</span> actores en la tabla
+      <canvas id="miGrafica" width="400" height="200"></canvas>
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </div>
-    <button id="clearStorageButton" onclick="clearLocalStorage()">Borrar Local Storage</button>
+    <button id="clearStorageButton" onclick="clearLocalStorage()">
+      Borrar Local Storage
+    </button>
     <script src="app.js"></script>
-</body>
+  </body>
 </html>

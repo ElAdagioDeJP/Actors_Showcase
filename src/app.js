@@ -224,11 +224,11 @@ class TablaActores {
     const actor = this.actorManager.actores.find((actor) => actor.id === id);
     const actorDetailsDiv = document.getElementById("actorDetails");
     const modalBackground = document.getElementById("modalBackground");
-  
+    actor.death_year = (actor.death_year == undefined) ? "Vivo" : actor.death_year;
     // Mostrar la ventana flotante y el fondo oscuro
     actorDetailsDiv.classList.add("active");
     modalBackground.classList.add("active");
-  
+
     // Actualiza el contenido del div con los detalles del actor
     actorDetailsDiv.innerHTML = `
       <button id="closeButton" onclick="cerrarDiv()">X</button>
