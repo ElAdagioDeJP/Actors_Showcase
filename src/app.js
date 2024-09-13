@@ -99,54 +99,49 @@ class ActorManager {
 
 class TablaRenderer {
   constructor(actorManager) {
-    // Constructor que inicializa el gestor de actores
-    this.actorManager = actorManager; // Asigna el gestor de actores a una propiedad de la instancia
-    this.cuerpoTabla = document.querySelector("#actors-table tbody"); // Obtiene el cuerpo de la tabla por su selector
-    this.elementoConteoActores = document.getElementById("actor-count"); // Obtiene el elemento de conteo de actores por su ID
+    this.actorManager = actorManager;
+    this.cuerpoTabla = document.querySelector("#actors-table tbody");
+    this.elementoConteoActores = document.getElementById("actor-count");
   }
 
   renderizarTabla(actores) {
-    // Método para renderizar la tabla con una lista de actores
-    this.cuerpoTabla.replaceChildren(...actores.map(this.crearFila.bind(this))); // Reemplaza el contenido del cuerpo de la tabla con filas creadas a partir de los actores
-    this.actualizarConteoActores(actores.length); // Actualiza el conteo de actores
+    this.cuerpoTabla.replaceChildren(...actores.map(this.crearFila.bind(this)));
+    this.actualizarConteoActores(actores.length);
   }
 
   crearFila(actor) {
-    // Método para crear una fila de la tabla para un actor
-    const fila = document.createElement("tr"); // Crea un elemento de fila
+    const fila = document.createElement("tr");
 
     const crearCelda = (contenido) => {
-      // Función para crear una celda de la tabla
-      const celda = document.createElement("td"); // Crea un elemento de celda
-      celda.textContent = contenido; // Asigna el contenido a la celda
-      return celda; // Retorna la celda
+      const celda = document.createElement("td");
+      celda.textContent = contenido;
+      return celda;
     };
 
-    const accionesCelda = document.createElement("td"); // Crea una celda para las acciones
-    const verBoton = document.createElement("button"); // Crea un botón para ver detalles
-    verBoton.textContent = "Ver"; // Asigna el texto "Ver" al botón
-    verBoton.onclick = () => tablaActores.verActor(actor.id); // Asigna una función de clic para ver detalles del actor
-    accionesCelda.appendChild(verBoton); // Añade el botón de ver a la celda de acciones
+    const accionesCelda = document.createElement("td");
 
-    const eliminarBoton = document.createElement("button"); // Crea un botón para eliminar
-    eliminarBoton.textContent = "Eliminar"; // Asigna el texto "Eliminar" al botón
-    eliminarBoton.onclick = () => tablaActores.eliminarActor(actor.id); // Asigna una función de clic para eliminar el actor
-    accionesCelda.appendChild(eliminarBoton); // Añade el botón de eliminar a la celda de acciones
+    const verBoton = document.createElement("button");
+    verBoton.innerHTML = '<i class="fas fa-eye"></i>'; // Ícono de ojo
+    verBoton.onclick = () => tablaActores.verActor(actor.id);
+    accionesCelda.appendChild(verBoton);
+
+    const eliminarBoton = document.createElement("button");
+    eliminarBoton.innerHTML = '<i class="fas fa-trash-alt"></i>'; // Ícono de basura
+    eliminarBoton.onclick = () => tablaActores.eliminarActor(actor.id);
+    accionesCelda.appendChild(eliminarBoton);
 
     fila.append(
-      // Añade las celdas a la fila
-      crearCelda(actor.id), // Celda con el ID del actor
-      crearCelda(actor.name), // Celda con el nombre del actor
-      crearCelda(actor.awards.join(", ")), // Celda con los premios del actor
-      accionesCelda // Celda con los botones de acciones
+      crearCelda(actor.id),
+      crearCelda(actor.name),
+      crearCelda(actor.awards.join(", ")),
+      accionesCelda
     );
 
-    return fila; // Retorna la fila
+    return fila;
   }
 
   actualizarConteoActores(conteo) {
-    // Método para actualizar el conteo de actores
-    this.elementoConteoActores.textContent = conteo; // Asigna el conteo de actores al elemento de conteo
+    this.elementoConteoActores.textContent = `Total de actores: ${conteo}`;
   }
 }
 
@@ -322,12 +317,12 @@ function verGrafico() {
     const miGrafica = new Chart(ctx, {
       type: "bar",
       data: {
-        labels: ["Cobre", "Plata", "Oro", "Platino"],
+        labels: ["Padma Shri","BAFTA", "Filmfare Award" ,"National Film Award" ,"Honorary Oscar", "Golden Horse Award", "Emmy" ,"Golden Globe", "Oscar"],
         datasets: [
           {
             label: "Premios",
-            data: [8.94, 10.49, 19.3, 21.45],
-            backgroundColor: ["#b87333", "silver", "gold", "#e5e4e2"],
+            data: [1, 1, 1, 1, 1, 1, 1, 1, 10],
+            backgroundColor: ["#b87333", "#87EBA2", "gold", "#e5e4e2","#0526BA", "#8A2BE2","#0B9912","#990B2C","#FC8A00"],
           },
         ],
       },
