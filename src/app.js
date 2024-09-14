@@ -1,25 +1,3 @@
-/*fetch('https://freetestapi.com/api/v1/actors')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('error ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-    
-        data.forEach(actor => {
-            const id = actor.id;
-            const name = actor.name;
-            const awards = actor.awards;
-
-            /
-            console.log(`ID: ${id}, Name: ${name}, Awards: ${awards.join(', ')}`);
-        });
-    })
-    .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-    });*/
-
 document.addEventListener("DOMContentLoaded", () => {
   // Espera a que el DOM esté completamente cargado antes de ejecutar el código
   const urlApi = "https://freetestapi.com/api/v1/actors"; // URL de la API para obtener los actores
@@ -141,6 +119,7 @@ class TablaRenderer {
     );
 
     return fila;
+    
   }
 
   actualizarConteoActores(conteo) {
@@ -150,53 +129,61 @@ class TablaRenderer {
 
 class TablaActores {
   constructor(urlApi) {
-    // Constructor que inicializa la URL de la API y otras propiedades
-    this.apiService = new APIService(urlApi); // Crea una instancia de APIService
-    this.actorManager = new ActorManager(this.apiService); // Crea una instancia de ActorManager
-    this.tablaRenderer = new TablaRenderer(this.actorManager); // Crea una instancia de TablaRenderer
-    this.idsGenerados = this.cargarIdsGenerados(); // Carga los IDs generados desde localStorage
-    this.cargarActores(); // Carga los actores desde localStorage
-    this.temporizador = null; // Inicializa el temporizador
-    this.terminoBusqueda = ""; // Inicializa el término de búsqueda
-    this.inicializar(); // Llama al método inicializar
+    this.apiService = new APIService(urlApi);
+    this.actorManager = new ActorManager(this.apiService);
+    this.tablaRenderer = new TablaRenderer(this.actorManager);
+    this.idsGenerados = this.cargarIdsGenerados();
+    this.cargarActores();
+    this.temporizador = null;
+    this.terminoBusqueda = "";
+    this.inicializar();
+    this.graficaPremios = new GraficaPremios();
   }
 
   inicializar() {
-    // Método para inicializar la tabla de actores
     window.addEventListener("load", () => {
-      // Añade un evento de carga a la ventana
-      this.programarActualizacion(); // Llama al método programarActualizacion
+      this.programarActualizacion();
     });
   }
 
   programarActualizacion() {
-    // Método para programar la actualización de actores
-    this.temporizador && clearTimeout(this.temporizador); // Cancela el temporizador anterior si existe
-    this.temporizador = setTimeout(() => this.actualizarActorAleatorio(), 5000); // Programa la actualización después de 5 segundos
+    this.temporizador && clearTimeout(this.temporizador);
+    this.temporizador = setTimeout(() => {
+      this.actualizarActorAleatorio();
+      this.actualizarGraficaPremios(); // Actualiza la gráfica cada vez que actualizamos un actor
+      this.programarActualizacion(); // Recursivamente vuelve a programar la actualización
+    }, 5000);
   }
 
   actualizarActorAleatorio() {
-    // Método para actualizar un actor aleatorio
-    const actorId = this.obtenerIdAleatorio(); // Obtiene un ID aleatorio
-    (actorId !== null && // Si el ID no es nulo
-      (console.log(`ID generado: ${actorId}`), // Imprime el ID generado en la consola
+    const actorId = this.obtenerIdAleatorio();
+    actorId !== null &&
       this.apiService
         .obtenerActorPorId(actorId)
         .then((actor) => {
-          // Obtiene el actor por su ID
-          this.actorManager.actualizarActores(actor); // Actualiza la lista de actores
-          this.guardarActores(); // Guarda los actores en localStorage
-          this.renderizarTabla(); // Renderiza la tabla con los actores disponibles o filtrados
-          this.programarActualizacion(); // Programa la siguiente actualización
+          this.actorManager.actualizarActores(actor);
+          this.guardarActores();
+          this.renderizarTabla();
         })
         .catch((error) => {
-          // Maneja errores en la petición
-          console.error("Error fetching actor:", error); // Imprime el error en la consola
-          this.programarActualizacion(); // Programa la siguiente actualización
-        }))) ||
-      console.log("No hay más IDs disponibles."); // Si no hay más IDs disponibles, imprime un mensaje en la consola
+          console.error("Error fetching actor:", error);
+        });
   }
 
+  // Función para actualizar la gráfica
+  actualizarGraficaPremios() {
+    const actores = this.actorManager.obtenerActoresDisponibles();
+    
+    // Usamos reduce para contar los premios de todos los actores sin usar if o for
+    const premiosContados = actores.reduce((acumulador, actor) => {
+      return actor.awards.reduce((acc, premio) => {
+        acc[premio] = (acc[premio] || 0) + 1;
+        return acc;
+      }, acumulador);
+    }, {});
+
+    this.graficaPremios.verGrafico(premiosContados);
+  }
   obtenerIdAleatorio() {
     // Método para obtener un ID aleatorio
     const idsPosibles = Array.from({ length: 40 }, (_, i) => i + 1); // Crea un array de IDs posibles del 1 al 40
@@ -222,70 +209,71 @@ class TablaActores {
     const actor = this.actorManager.actores.find((actor) => actor.id === id);
     const actorDetailsDiv = document.getElementById("actorDetails");
     const modalBackground = document.getElementById("modalBackground");
-    actor.death_year =
-      actor.death_year == undefined ? "Vivo" : actor.death_year;
-    // Mostrar la ventana flotante y el fondo oscuro
+
+    actor.death_year = actor.death_year == undefined ? "Sigue vivo" : actor.death_year;
     actorDetailsDiv.classList.add("active");
     modalBackground.classList.add("active");
 
-    // Actualiza el contenido del div con los detalles del actor
     actorDetailsDiv.innerHTML = `
       <button id="closeButton" onclick="cerrarDiv()">X</button>
       <p>ID: ${actor.id}</p>
       <h3>Nombre: ${actor.name}</h3>
       <h3>Nacionalidad: ${actor.nationality}</h3>
       <h4>Nacimiento: ${actor.birth_year}</h4>
-      <h4>Muerte: ${actor.death_year}</h4>
-        <h4>Conocido por: ${actor.known_for.join(", ")}</h4>
-        <p>Biografía: ${actor.biography}</p>
+      <h4>Fallecido: ${actor.death_year}</h4>
+      <h4>Conocido por: ${actor.known_for.join(", ")}</h4>
+      <p>Biografía: ${actor.biography}</p>
       <p>Premios: ${actor.awards.join(", ")}</p>
       <img src="${actor.image}" alt="${actor.name}" width="150">
     `;
+
+    // Pasar premios del actor al gráfico
+    const premiosContados = this.contarPremios(actor.awards);
+    this.graficaPremios.verGrafico(premiosContados);
+
+    return actor;
   }
 
   eliminarActor(id) {
-    // Método para eliminar un actor por su ID
-    this.actorManager.eliminarActor(id); // Elimina el actor del gestor de actores
+    this.actorManager.eliminarActor(id); 
     this.idsGenerados = this.idsGenerados.reduce(
-      (
-        result,
-        generatedId // Filtra los IDs generados para excluir el ID eliminado
-      ) => (generatedId !== id ? result.concat(generatedId) : result),
+      (result, generatedId) => (generatedId !== id ? result.concat(generatedId) : result),
       []
-    ); // Si el ID generado no coincide, lo añade al resultado
-    this.guardarIdsGenerados(); // Guarda los IDs generados en localStorage
-    this.guardarActores(); // Guarda los actores en localStorage
-    console.log(`ID eliminado: ${id}`); // Imprime el ID eliminado en la consola
-    console.log(
-      `IDs guardados después de eliminar: ${this.idsGenerados.join(", ")}`
-    ); // Imprime los IDs guardados después de eliminar en la consola
-    this.renderizarTabla(); // Renderiza la tabla con los actores disponibles o filtrados
-    this.programarActualizacion(); // Programa la siguiente actualización después de 5 segundos
+    );
+    this.guardarIdsGenerados();
+    this.guardarActores();
+  
+    // Actualizar la gráfica con los premios restantes
+    this.actualizarGraficaPremios();
+  
+    console.log(`ID eliminado: ${id}`);
+    console.log(`IDs guardados después de eliminar: ${this.idsGenerados.join(", ")}`);
+    this.renderizarTabla();
+    this.programarActualizacion();
   }
+  
 
   limpiarTabla() {
     console.log("Limpiando tabla");
-    // Crear un array con números del 1 al 40
+  
     const numbers = Array.from({ length: 40 }, (_, i) => i + 1);
-
-    // Mezclar el array de números
     numbers.sort(() => Math.random() - 0.5);
-
-    // Usar forEach para iterar sobre los números mezclados
+  
     numbers.forEach((number) => {
       this.actorManager.eliminarActor(number);
       this.idsGenerados = this.idsGenerados.reduce(
-        (
-          result,
-          generatedId // Filtra los IDs generados para excluir el ID eliminado
-        ) => (generatedId !== number ? result.concat(generatedId) : result),
+        (result, generatedId) => (generatedId !== number ? result.concat(generatedId) : result),
         []
-      ); // Si el ID generado no coincide, lo añade al resultado
-      this.guardarIdsGenerados(); // Guarda los IDs generados en localStorage
-      this.guardarActores(); // Guarda los actores en localStorage
+      );
+      this.guardarIdsGenerados();
+      this.guardarActores();
     });
+  
     this.renderizarTabla();
     this.programarActualizacion();
+  
+    // Vaciar la gráfica
+    this.graficaPremios.verGrafico({});
   }
   buscarActorPorNombre(nombre) {
     // Método para buscar actores por nombre
@@ -328,7 +316,14 @@ class TablaActores {
     actoresGuardados.map((actor) => this.actorManager.actualizarActores(actor)); // Actualiza la lista de actores con los actores guardados
     this.renderizarTabla(); // Renderiza la tabla después de cargar los actores
   }
+  contarPremios(premios) {
+    return premios.reduce((acumulador, premio) => {
+      acumulador[premio] = (acumulador[premio] || 0) + 1;
+      return acumulador;
+    }, {});
+  }
 }
+
 function cerrarDiv() {
   const actorDetailsDiv = document.getElementById("actorDetails");
   const modalBackground = document.getElementById("modalBackground");
@@ -337,53 +332,47 @@ function cerrarDiv() {
   actorDetailsDiv.classList.remove("active");
   modalBackground.classList.remove("active");
 }
-function verGrafico() {
-  const ctx = document.getElementById("miGrafica").getContext("2d");
-  const miGrafica = new Chart(ctx, {
-    type: "bar",
-    data: {
-      labels: [
-        "Padma Shri",
-        "BAFTA",
-        "Filmfare Award",
-        "National Film Award",
-        "Honorary Oscar",
-        "Golden Horse Award",
-        "Emmy",
-        "Golden Globe",
-        "Oscar",
-      ],
-      datasets: [
-        {
-          label: "Premios",
-          data: [1, 1, 1, 1, 1, 1, 1, 1, 10],
-          backgroundColor: [
-            "#b87333",
-            "#87EBA2",
-            "gold",
-            "#e5e4e2",
-            "#0526BA",
-            "#8A2BE2",
-            "#0B9912",
-            "#990B2C",
-            "#FC8A00",
-          ],
-        },
-      ],
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
+class GraficaPremios {
+  constructor() {
+    this.chart = null;
+  }
+
+  verGrafico(premiosContados) {
+    const ctx = document.getElementById("miGrafica")?.getContext("2d");
+
+    // Crear o actualizar el gráfico
+    ctx && (this.chart ? this.chart.destroy() : null); // Destruye el gráfico anterior si ya existe
+
+    // Actualiza los datos del gráfico
+    this.chart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: Object.keys(premiosContados), // Etiquetas de los premios
+        datasets: [
+          {
+            label: "Premios",
+            data: Object.values(premiosContados), // Cantidad de premios
+            backgroundColor: [
+              "#b87333", "#87EBA2", "gold", "#e5e4e2", "#0526BA",
+              "#8A2BE2", "#0B9912", "#990B2C", "#FC8A00"
+            ],
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
         },
       },
-    },
-  });
+    });
+  }
 }
+// Crear una instancia de la clase y usar los métodos
+const gestionPremios = new GraficaPremios();
 
-verGrafico();
-/* 
-Falta mejorar la grafica para que muestre los premios en tiempo real
-Poder eliminar todos los actores de una vez para iniciar desde 0
-Meter las funciones que cree en una clase
-*/
+// Lamar los métodos según sea necesariol
+gestionPremios.verGrafico();
+
+
