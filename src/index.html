@@ -157,7 +157,7 @@
         }
       }
 
-      #clearStorageButton {
+      #clearTable {
         background: linear-gradient(
           90deg,
           #ff6b6b,
@@ -176,10 +176,12 @@
         display: inline-block;
         text-align: center;
         text-transform: uppercase;
+        justify-content: center;
         letter-spacing: 1px;
+        margin: 20px 0;
       }
 
-      #clearStorageButton:hover {
+      #clearTable:hover {
         background: linear-gradient(
           90deg,
           #ff4b4b,
@@ -188,7 +190,7 @@
         transform: scale(1.05); /* Efecto de aumento al pasar el mouse */
       }
 
-      #clearStorageButton:active {
+      #clearTable:active {
         background: linear-gradient(
           90deg,
           #ff3b3b,
@@ -197,7 +199,7 @@
         transform: scale(0.95); /* Leve reducción al presionar */
       }
 
-      #clearStorageButton:focus {
+      #clearTable:focus {
         outline: none; /* Eliminar borde de enfoque */
       }
 
@@ -252,14 +254,16 @@
         <button id="closeButton" onclick="cerrarDiv()">X</button>
       </div>
     </div>
+    <center>
+      <button id="clearTable" onclick="clearLocalStorage()">
+        Limpiar Tabla
+      </button>
+    </center>
     <div>
       <span id="actor-count">0</span> actores en la tabla
       <canvas id="miGrafica" width="400" height="200"></canvas>
       <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </div>
-    <button id="clearStorageButton" onclick="clearLocalStorage()">
-      Borrar Local Storage
-    </button>
     <script src="app.js"></script>
   </body>
 </html>

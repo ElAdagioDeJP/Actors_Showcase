@@ -130,6 +130,9 @@ class TablaRenderer {
     eliminarBoton.onclick = () => tablaActores.eliminarActor(actor.id);
     accionesCelda.appendChild(eliminarBoton);
 
+    const limpiarTabla = document.getElementById("clearTable");
+    limpiarTabla.onclick = () => tablaActores.limpiarTabla();
+
     fila.append(
       crearCelda(actor.id),
       crearCelda(actor.name),
@@ -219,7 +222,8 @@ class TablaActores {
     const actor = this.actorManager.actores.find((actor) => actor.id === id);
     const actorDetailsDiv = document.getElementById("actorDetails");
     const modalBackground = document.getElementById("modalBackground");
-    actor.death_year = (actor.death_year == undefined) ? "Vivo" : actor.death_year;
+    actor.death_year =
+      actor.death_year == undefined ? "Vivo" : actor.death_year;
     // Mostrar la ventana flotante y el fondo oscuro
     actorDetailsDiv.classList.add("active");
     modalBackground.classList.add("active");
@@ -238,8 +242,6 @@ class TablaActores {
       <img src="${actor.image}" alt="${actor.name}" width="150">
     `;
   }
-  
-  
 
   eliminarActor(id) {
     // Método para eliminar un actor por su ID
@@ -261,6 +263,30 @@ class TablaActores {
     this.programarActualizacion(); // Programa la siguiente actualización después de 5 segundos
   }
 
+  limpiarTabla() {
+    console.log("Limpiando tabla");
+    // Crear un array con números del 1 al 40
+    const numbers = Array.from({ length: 40 }, (_, i) => i + 1);
+
+    // Mezclar el array de números
+    numbers.sort(() => Math.random() - 0.5);
+
+    // Usar forEach para iterar sobre los números mezclados
+    numbers.forEach((number) => {
+      this.actorManager.eliminarActor(number);
+      this.idsGenerados = this.idsGenerados.reduce(
+        (
+          result,
+          generatedId // Filtra los IDs generados para excluir el ID eliminado
+        ) => (generatedId !== number ? result.concat(generatedId) : result),
+        []
+      ); // Si el ID generado no coincide, lo añade al resultado
+      this.guardarIdsGenerados(); // Guarda los IDs generados en localStorage
+      this.guardarActores(); // Guarda los actores en localStorage
+    });
+    this.renderizarTabla();
+    this.programarActualizacion();
+  }
   buscarActorPorNombre(nombre) {
     // Método para buscar actores por nombre
     this.terminoBusqueda = nombre; // Almacena el término de búsqueda actual
@@ -302,45 +328,60 @@ class TablaActores {
     actoresGuardados.map((actor) => this.actorManager.actualizarActores(actor)); // Actualiza la lista de actores con los actores guardados
     this.renderizarTabla(); // Renderiza la tabla después de cargar los actores
   }
-
 }
 function cerrarDiv() {
-    const actorDetailsDiv = document.getElementById("actorDetails");
-    const modalBackground = document.getElementById("modalBackground");
-  
-    // Ocultar la ventana flotante y el fondo oscuro
-    actorDetailsDiv.classList.remove("active");
-    modalBackground.classList.remove("active");
-  }
+  const actorDetailsDiv = document.getElementById("actorDetails");
+  const modalBackground = document.getElementById("modalBackground");
+
+  // Ocultar la ventana flotante y el fondo oscuro
+  actorDetailsDiv.classList.remove("active");
+  modalBackground.classList.remove("active");
+}
 function verGrafico() {
-    const ctx = document.getElementById("miGrafica").getContext("2d");
-    const miGrafica = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Padma Shri","BAFTA", "Filmfare Award" ,"National Film Award" ,"Honorary Oscar", "Golden Horse Award", "Emmy" ,"Golden Globe", "Oscar"],
-        datasets: [
-          {
-            label: "Premios",
-            data: [1, 1, 1, 1, 1, 1, 1, 1, 10],
-            backgroundColor: ["#b87333", "#87EBA2", "gold", "#e5e4e2","#0526BA", "#8A2BE2","#0B9912","#990B2C","#FC8A00"],
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
+  const ctx = document.getElementById("miGrafica").getContext("2d");
+  const miGrafica = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: [
+        "Padma Shri",
+        "BAFTA",
+        "Filmfare Award",
+        "National Film Award",
+        "Honorary Oscar",
+        "Golden Horse Award",
+        "Emmy",
+        "Golden Globe",
+        "Oscar",
+      ],
+      datasets: [
+        {
+          label: "Premios",
+          data: [1, 1, 1, 1, 1, 1, 1, 1, 10],
+          backgroundColor: [
+            "#b87333",
+            "#87EBA2",
+            "gold",
+            "#e5e4e2",
+            "#0526BA",
+            "#8A2BE2",
+            "#0B9912",
+            "#990B2C",
+            "#FC8A00",
+          ],
+        },
+      ],
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
         },
       },
-    });
-  }
-  function clearLocalStorage() {
-    confirm('¿Estás seguro de que deseas borrar todo el Local Storage? Esta acción no se puede deshacer.') 
-      && (localStorage.clear(), alert('Local Storage ha sido borrado.'));
-  }
-  
-  verGrafico();
+    },
+  });
+}
+
+verGrafico();
 /* 
 Falta mejorar la grafica para que muestre los premios en tiempo real
 Poder eliminar todos los actores de una vez para iniciar desde 0
