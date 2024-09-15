@@ -31,12 +31,6 @@ La sección de estadísticas muestra gráficos interactivos que resumen los prem
 - **Distribución de premios por categoría**
 - **Comparativa entre actores**
 
-## 🎯 Próximas Mejoras
-
-- Filtro de búsqueda avanzada por nacionalidad, género de las películas, etc.
-- Gráficos adicionales para ver la evolución de premios a lo largo del tiempo.
-- Paginación en la tabla de actores.
-
 ## 📦 Instalación
 
 1. Clona el repositorio:
