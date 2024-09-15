@@ -148,14 +148,16 @@ class TablaActores {
 
   programarActualizacion() {
     this.temporizador && clearTimeout(this.temporizador);
-    this.temporizador = setTimeout(() => {
+    this.idsGenerados.length < 40 && (this.temporizador = setTimeout(() => {
       this.actualizarActorAleatorio();
       this.actualizarGraficaPremios(); // Actualiza la gráfica cada vez que actualizamos un actor
       this.programarActualizacion(); // Recursivamente vuelve a programar la actualización
-    }, 5000);
+    }, 5000));
   }
 
-  actualizarActorAleatorio() {
+   actualizarActorAleatorio() {
+    this.idsGenerados.length >= 40 && console.log('Se han alcanzado los 40 actores. No se realizarán más peticiones.');
+
     const actorId = this.obtenerIdAleatorio();
     actorId !== null &&
       this.apiService
@@ -164,26 +166,13 @@ class TablaActores {
           this.actorManager.actualizarActores(actor);
           this.guardarActores();
           this.renderizarTabla();
+          this.actualizarGraficaPremios();
         })
         .catch((error) => {
           console.error("Error fetching actor:", error);
         });
   }
 
-  // Función para actualizar la gráfica
-  actualizarGraficaPremios() {
-    const actores = this.actorManager.obtenerActoresDisponibles();
-    
-    // Usamos reduce para contar los premios de todos los actores sin usar if o for
-    const premiosContados = actores.reduce((acumulador, actor) => {
-      return actor.awards.reduce((acc, premio) => {
-        acc[premio] = (acc[premio] || 0) + 1;
-        return acc;
-      }, acumulador);
-    }, {});
-
-    this.graficaPremios.verGrafico(premiosContados);
-  }
   obtenerIdAleatorio() {
     // Método para obtener un ID aleatorio
     const idsPosibles = Array.from({ length: 40 }, (_, i) => i + 1); // Crea un array de IDs posibles del 1 al 40
@@ -204,6 +193,27 @@ class TablaActores {
       console.log(`IDs guardados: ${this.idsGenerados.join(", ")}`)); // Imprime los IDs guardados en la consola
     return nuevoId; // Retorna el nuevo ID
   }
+
+  // Función para actualizar la gráfica
+  actualizarGraficaPremios() {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+    this.idsGenerados.length >= 40 && console.log('Se han alcanzado los 40 actores. No se actualizará la gráfica.');
+
+    const actores = this.actorManager.obtenerActoresDisponibles();
+    
+    // Usamos reduce para contar los premios de todos los actores sin usar if o for
+    const premiosContados = actores.reduce((acumulador, actor) => {
+      return actor.awards.reduce((acc, premio) => {
+        acc[premio] = (acc[premio] || 0) + 1;
+        return acc;
+      }, acumulador);
+    }, {});
+
+    this.graficaPremios.verGrafico(premiosContados);
+    window.scrollTo(scrollLeft, scrollTop);
+  }
+
 
   verActor(id) {
     const actor = this.actorManager.actores.find((actor) => actor.id === id);
@@ -275,6 +285,7 @@ class TablaActores {
     // Vaciar la gráfica
     this.graficaPremios.verGrafico({});
   }
+
   buscarActorPorNombre(nombre) {
     // Método para buscar actores por nombre
     this.terminoBusqueda = nombre; // Almacena el término de búsqueda actual
@@ -291,7 +302,6 @@ class TablaActores {
 
   guardarIdsGenerados() {
     // Método para guardar los IDs generados en localStorage
-    this.idsGenerados.length >= 40 && (this.idsGenerados = []); // Si hay 40 o más IDs generados, los vacía
     localStorage.setItem("idsGenerados", JSON.stringify(this.idsGenerados)); // Guarda los IDs generados en localStorage
   }
 
@@ -316,6 +326,7 @@ class TablaActores {
     actoresGuardados.map((actor) => this.actorManager.actualizarActores(actor)); // Actualiza la lista de actores con los actores guardados
     this.renderizarTabla(); // Renderiza la tabla después de cargar los actores
   }
+
   contarPremios(premios) {
     return premios.reduce((acumulador, premio) => {
       acumulador[premio] = (acumulador[premio] || 0) + 1;
