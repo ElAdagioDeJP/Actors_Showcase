@@ -2,7 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Espera a que el DOM esté completamente cargado antes de ejecutar el código
   const urlApi = "https://freetestapi.com/api/v1/actors"; // URL de la API para obtener los actores
   window.tablaActores = new TablaActores(urlApi); // Crea una instancia de TablaActores y la asigna a una variable global
-
   // Agregar campo de búsqueda
   const searchInput = document.getElementById("search-actor"); // Obtiene el elemento de entrada de búsqueda por su ID
   searchInput.addEventListener("input", (event) => {
@@ -136,13 +135,14 @@ class TablaActores {
     this.cargarActores();
     this.temporizador = null;
     this.terminoBusqueda = "";
-    this.inicializar();
     this.graficaPremios = new GraficaPremios();
+    this.inicializar();
   }
 
   inicializar() {
     window.addEventListener("load", () => {
       this.programarActualizacion();
+      this.graficaPremios.cargarGraficoDesdeLocalStorage();
     });
   }
 
@@ -379,11 +379,14 @@ class GraficaPremios {
       },
     });
   }
+  cargarGraficoDesdeLocalStorage() {
+    const premiosContadosJSON = localStorage.getItem("premiosContados");
+    premiosContadosJSON && this.verGrafico(JSON.parse(premiosContadosJSON));
+  }
 }
 // Crear una instancia de la clase y usar los métodos
 const gestionPremios = new GraficaPremios();
 
-// Lamar los métodos según sea necesariol
-gestionPremios.verGrafico();
+
 
 
