@@ -19,9 +19,7 @@ Este proyecto consume una API de actores para mostrar información detallada en 
   - [Heroicons](https://heroicons.com/) para iconos
   - JavaScript (ES6+)
   - [Chart.js](https://www.chartjs.org/) para los gráficos de premios
-- **Backend**:
   - Consumo de una API REST de actores
-  - AJAX para la obtención de datos
 
 ## 📊 Visualización de Premios
 
