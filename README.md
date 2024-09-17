@@ -42,3 +42,5 @@ La sección de estadísticas muestra gráficos interactivos que resumen los prem
 - Conexión a internet para consumir la API de actores.
 ## 🤝 Contribuciones
 ¡Las contribuciones son bienvenidas! Si tienes sugerencias o mejoras, no dudes en abrir un issue o enviar un pull request.
+<hr>
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR0VJ24fphuXrYncb9MVfiY9k25bLbTlNLdiw&s"> 
