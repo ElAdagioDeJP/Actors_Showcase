@@ -219,6 +219,141 @@
       th{
         background: linear-gradient(90deg, #2C3E50, #1ABC9C);
       }
+      /* Estilo moderno del contenedor principal */
+#actorDetails {
+    background-color: #f9f9f9; /* Fondo claro y neutro */
+    border-radius: 16px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra sutil y suave */
+    padding: 30px;
+    width: 80%; /* Ancho flexible */
+    max-width: 600px; /* Ancho máximo */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    text-align: center; /* Centramos el texto */
+    display: none;
+    overflow-y: auto; /* Permitir scroll si el contenido es largo */
+    max-height: 90vh; /* No sobrepase la altura de la pantalla */
+    transition: transform 0.3s ease, opacity 0.3s ease; /* Transición suave al aparecer */
+    opacity: 0; /* Inicialmente oculto */
+}
+
+#actorDetails.active {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.05); /* Efecto de agrandado al aparecer */
+}
+
+/* Fondo oscuro detrás del modal */
+#modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+#modalBackground.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Botón de cierre moderno */
+#closeButton {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#closeButton:hover {
+    color: #e74c3c; /* Color de hover */
+}
+
+/* Estilos para los textos */
+#actorDetails h3 {
+    font-size: 24px;
+    margin-bottom: 12px;
+    color: #333;
+    font-weight: 600;
+}
+
+#actorDetails h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #666;
+    font-weight: 500;
+}
+
+#actorDetails p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+    color: #555;
+}
+
+/* Estilo moderno para la imagen */
+#actorDetails img {
+    border-radius: 12px;
+    margin: 20px auto;
+    width: 60%; /* Imagen más pequeña */
+    height: auto;
+    display: block; /* Centrar la imagen */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    #actorDetails {
+        padding: 20px;
+        width: 90%;
+    }
+
+    #actorDetails h3 {
+        font-size: 22px;
+    }
+
+    #actorDetails h4 {
+        font-size: 16px;
+    }
+
+    #actorDetails p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    #actorDetails {
+        padding: 15px;
+        width: 95%;
+    }
+
+    #actorDetails h3 {
+        font-size: 20px;
+    }
+
+    #actorDetails h4 {
+        font-size: 14px;
+    }
+
+    #actorDetails p {
+        font-size: 12px;
+    }
+}
+
     </style>
   </head>
   <body>

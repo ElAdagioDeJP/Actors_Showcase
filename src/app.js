@@ -237,10 +237,6 @@ class TablaActores {
       <img src="${actor.image}" alt="${actor.name}" width="150">
     `;
 
-    // Pasar premios del actor al gráfico
-    const premiosContados = this.contarPremios(actor.awards);
-    this.graficaPremios.verGrafico(premiosContados);
-
     return actor;
   }
 
