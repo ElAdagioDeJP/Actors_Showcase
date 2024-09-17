@@ -220,7 +220,7 @@ class TablaActores {
     const actorDetailsDiv = document.getElementById("actorDetails");
     const modalBackground = document.getElementById("modalBackground");
 
-    actor.death_year = actor.death_year == undefined ? "Sigue vivo" : actor.death_year;
+    actor.death_year = actor.death_year == undefined ? "No ha fallecido" : actor.death_year;
     actorDetailsDiv.classList.add("active");
     modalBackground.classList.add("active");
 
@@ -229,8 +229,8 @@ class TablaActores {
       <p>ID: ${actor.id}</p>
       <h3>Nombre: ${actor.name}</h3>
       <h3>Nacionalidad: ${actor.nationality}</h3>
-      <h4>Nacimiento: ${actor.birth_year}</h4>
-      <h4>Fallecido: ${actor.death_year}</h4>
+      <h4>Año de Nacimiento: ${actor.birth_year}</h4>
+      <h4>Fallecimiento: ${actor.death_year}</h4>
       <h4>Conocido por: ${actor.known_for.join(", ")}</h4>
       <p>Biografía: ${actor.biography}</p>
       <p>Premios: ${actor.awards.join(", ")}</p>
