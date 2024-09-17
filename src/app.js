@@ -365,8 +365,8 @@ class GraficaPremios {
             label: "Premios",
             data: Object.values(premiosContados), // Cantidad de premios
             backgroundColor: [
-              "#b87333", "#87EBA2", "gold", "#e5e4e2", "#0526BA",
-              "#8A2BE2", "#0B9912", "#990B2C", "#FC8A00"
+              "#E04935", "#87EBA2", "gold", "#e5e4e2", "#0526BA",
+              "#8A2BE2", "#0B9912", "#990B2C", "#FC8A00","#51E067"
             ],
           },
         ],

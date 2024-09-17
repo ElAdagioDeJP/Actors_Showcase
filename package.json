@@ -4,5 +4,8 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5"
+  },
+  "scripts": {
+    "dev": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch "
   }
 }
