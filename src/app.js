@@ -350,6 +350,7 @@ class GraficaPremios {
 
   verGrafico(premiosContados) {
     const ctx = document.getElementById("miGrafica")?.getContext("2d");
+    localStorage.setItem("premiosContados", JSON.stringify(premiosContados));
 
     // Crear o actualizar el gráfico
     ctx && (this.chart ? this.chart.destroy() : null); // Destruye el gráfico anterior si ya existe
