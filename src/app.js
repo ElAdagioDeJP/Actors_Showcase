@@ -283,10 +283,25 @@ class TablaActores {
   }
 
   buscarActorPorNombre(nombre) {
-    // Método para buscar actores por nombre
     this.terminoBusqueda = nombre; // Almacena el término de búsqueda actual
     this.renderizarTabla(); // Renderiza la tabla con los actores filtrados
+  
+    const actoresEncontrados = this.actorManager.buscarActoresPorNombre(nombre);
+  
+    // Actualizar la gráfica con los premios del primer actor encontrado o la gráfica original
+    const premiosContados = nombre
+      ? (actoresEncontrados.length > 0 ? this.contarPremios(actoresEncontrados[0].awards) : {})
+      : this.actorManager.obtenerActoresDisponibles().reduce((acumulador, actor) => {
+          return actor.awards.reduce((acc, premio) => {
+            acc[premio] = (acc[premio] || 0) + 1;
+            return acc;
+          }, acumulador);
+        }, {});
+  
+    this.graficaPremios.verGrafico(premiosContados);
   }
+
+
 
   renderizarTabla() {
     // Método para renderizar la tabla
