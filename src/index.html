@@ -67,7 +67,7 @@
 
       /* Buscador */
       #search-actor {
-        width: 100%;
+        width: 50%;
         padding: 16px;
         border: 1px solid #ccc;
         border-radius: 50px;
@@ -360,7 +360,20 @@
     }
 
 }
-    
+#actor-count {
+            font-size: 1em;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #007bff;
+            padding: 5px 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        #actor-count:hover {
+            transform: scale(1.1);
+        }
     </style>
   </head>
   <body>
@@ -371,11 +384,11 @@
       </header>
 
       <div class="p-6 max-w-4xl mx-auto">
-        <input
+        <center><input
           type="text"
           id="search-actor"
           placeholder="Buscar por nombre"
-        />
+        /></center>
         <div class="overflow-x-auto">
           <table id="actors-table">
             <thead>
@@ -403,7 +416,7 @@
       </center>
 
       <div>
-        <span id="actor-count">0</span> actores en la tabla
+        <span id="actor-count">0</span>
         <canvas id="miGrafica" width="400" height="200"></canvas>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
       </div>

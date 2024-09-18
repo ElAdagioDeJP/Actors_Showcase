@@ -122,7 +122,7 @@ class TablaRenderer {
   }
 
   actualizarConteoActores(conteo) {
-    this.elementoConteoActores.textContent = `Total de actores: ${conteo}`;
+    this.elementoConteoActores.textContent = `${conteo}`;
   }
 }
 
