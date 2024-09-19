@@ -298,7 +298,7 @@ class TablaActores {
           }, acumulador);
         }, {});
   
-    this.graficaPremios.verGrafico(premiosContados);
+    //this.graficaPremios.verGrafico(premiosContados);
   }
 
 
